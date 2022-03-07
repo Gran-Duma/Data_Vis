@@ -88,6 +88,21 @@ def data_vis(data):
 
         return data_frame
 
+    def row_naming(data_frame):
+
+        saved_inputs = []
+        for i in range(len(df.index)):
+
+            # creates list of user chosen row names
+            n_row = 'Row%s name?:' %i
+            r_name = tk.simpledialog.askstring(title=None,prompt=n_row)
+            saved_inputs.append(r_name)
+
+        # updates dataframe with user chosen row names
+        old_names = data_frame.index.tolist()
+        data_frame = data_frame.rename(index=dict(zip(old_names, saved_inputs)))
+
+        return data_frame
 
     f_name = tk.simpledialog.askstring(title=None,prompt='File name?:')
 
@@ -111,6 +126,17 @@ def data_vis(data):
 
         tk.messagebox.showinfo(title=None,message='Columns will be indexed starting at 0')
         cols_rn= False
+
+    ask_row_names = tk.messagebox.askquestion(title=None,message='Give custom row names?')
+    if ask_row_names == 'yes':
+
+        df = row_naming(df)
+        rows_rn = True
+
+    elif ask_row_names == 'no':
+
+        tk.messagebox.showinfo(title=None,message='Rows will be indexed starting at 0')
+        rows_rn= False
 
     # saves csv file to same dir as this .py file
     df.to_csv('%s.csv' %f_name)
