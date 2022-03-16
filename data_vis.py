@@ -11,14 +11,14 @@ from itertools import count
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+import threading
+import data_gen
 
-plt.style.use('fivethirtyeight')
+# def ani():
 
-x_vals = []
-y_vals = []
+#     FuncAnimation(plt.gcf(), animate, interval=1000)
 
-index = count()
-
+#     plt.show()
 
 def animate(i):
     data = pd.read_csv('data.csv')
@@ -28,14 +28,20 @@ def animate(i):
 
     plt.cla()
 
-    plt.plot(x, y1, label='Channel 1')
-    plt.plot(x, y2, label='Channel 2')
+    plt.plot(x, y1, label='y1')
+    plt.plot(x, y2, label='y2')
 
     plt.legend(loc='upper left')
     plt.tight_layout()
 
+if __name__ == '__main__':
 
-ani = FuncAnimation(plt.gcf(), animate, interval=1000)
+    ani = FuncAnimation(plt.gcf(), animate, interval=1000)
 
-plt.tight_layout()
-plt.show()
+    t1 = threading.Thread(target=ani)
+    t2 = threading.Thread(target=data_gen.gen)
+
+    t1.start()
+    t2.start()
+
+    plt.show()
