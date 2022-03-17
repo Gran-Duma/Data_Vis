@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
 import csv
+import pandas as pd
 import random
 import time
+from datetime import date
 
 def gen():
     """creates and appends csv"""
@@ -49,8 +51,17 @@ def gen():
 
 
 def gen_stop():
+    """kills data gen"""
     global yoyo
     yoyo = False
+
+def save_data():
+    """stops data gen and makes a copy of current data gen csv"""
+    today = date.today()
+    d1 = today.strftime("%m_%d_%y")
+    gen_stop()
+    df = pd.read_csv('data.csv')
+    df.to_csv(f'{d1}_' + 'data.csv')
 
 if __name__ == '__main__':
 

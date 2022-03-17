@@ -3,23 +3,16 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
-import threading
 
 def data_vis():
-    """primary coordinating function"""
+    """creates animation from current figure then shows it in new window"""
 
     ani = FuncAnimation(plt.gcf(), animate, interval=1000)
-
-    # t1 = threading.Thread(target=ani)
-    # t2 = threading.Thread(target=data_gen.gen)
-
-    # t1.start()
-    # t2.start()
 
     plt.show()
 
 def animate(i):
-    """reads from csv and makes plot"""
+    """reads from csv and makes figure"""
 
     data = pd.read_csv('data.csv')
     x = data['x_value']
