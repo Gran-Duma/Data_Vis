@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Mar 16 10:39:56 2022
-
-@author: Brandon
-"""
 #!/usr/bin/env python3
 
 import csv
@@ -11,6 +5,11 @@ import random
 import time
 
 def gen():
+    """creates and appends csv"""
+
+    global yoyo
+    yoyo = True
+
 
     x_value = 0
     total_1 = 1000
@@ -23,7 +22,7 @@ def gen():
         csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         csv_writer.writeheader()
 
-    while True:
+    while yoyo == True:
 
         with open('data.csv', 'a') as csv_file:
             csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
@@ -42,7 +41,17 @@ def gen():
             total_2 = total_2 + random.randint(-5, 6)
 
         time.sleep(1)
-    
+
+        if yoyo == False:
+
+            print("Ayo we donezo")
+            break
+
+
+def gen_stop():
+    global yoyo
+    yoyo = False
+
 if __name__ == '__main__':
 
     gen()
