@@ -42,7 +42,29 @@ def gen():
             total_2 = total_2 + random.randint(-5, 6)
 
         time.sleep(1)
+<<<<<<< Updated upstream
     
+=======
+
+        if yoyo == False:
+
+            print("Ayo we donezo")
+            break
+
+
+def gen_stop():
+    """kills data gen"""
+    global yoyo
+    yoyo = False
+
+def save_data():
+    """stops data gen and makes a copy of current data gen csv"""
+    today = date.today()
+    d1 = today.strftime("%m_%d_%y")
+    df = pd.read_csv('data.csv')
+    df.to_csv(f'{d1}_' + 'data.csv')
+
+>>>>>>> Stashed changes
 if __name__ == '__main__':
 
     gen()
