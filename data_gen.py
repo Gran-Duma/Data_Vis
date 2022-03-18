@@ -1,16 +1,17 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Mar 16 10:39:56 2022
-
-@author: Brandon
-"""
 #!/usr/bin/env python3
 
 import csv
+import pandas as pd
 import random
 import time
+from datetime import date
 
 def gen():
+    """creates and appends csv"""
+
+    global yoyo
+    yoyo = True
+
 
     x_value = 0
     total_1 = 1000
@@ -23,7 +24,7 @@ def gen():
         csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         csv_writer.writeheader()
 
-    while True:
+    while yoyo == True:
 
         with open('data.csv', 'a') as csv_file:
             csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
@@ -42,9 +43,12 @@ def gen():
             total_2 = total_2 + random.randint(-5, 6)
 
         time.sleep(1)
+<<<<<<< HEAD
 <<<<<<< Updated upstream
     
 =======
+=======
+>>>>>>> gui_control
 
         if yoyo == False:
 
@@ -61,10 +65,17 @@ def save_data():
     """stops data gen and makes a copy of current data gen csv"""
     today = date.today()
     d1 = today.strftime("%m_%d_%y")
+<<<<<<< HEAD
     df = pd.read_csv('data.csv')
     df.to_csv(f'{d1}_' + 'data.csv')
 
 >>>>>>> Stashed changes
+=======
+    gen_stop()
+    df = pd.read_csv('data.csv')
+    df.to_csv(f'{d1}_' + 'data.csv')
+
+>>>>>>> gui_control
 if __name__ == '__main__':
 
     gen()
