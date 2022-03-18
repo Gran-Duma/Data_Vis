@@ -8,29 +8,25 @@ def run_gui():
     """main window with options"""
 
     root = tk.Tk()
-    root.geometry("400x400")
+    root.geometry("600x300")
 
-    button_1 = tk.Button(root, text ='Start', command=lambda:[gen,vis])
+    button_1 = tk.Button(root, text ='Kill Data Gen', command=dg.gen_stop)
     button_1.config(width=20, height=2, pady=5)
 
-    button_2 = tk.Button(root, text ='Kill Data Gen', command=dg.gen_stop)
-    button_2.config(width=20, height=2, pady=5)
+    button_2 = tk.Button(root, text ='Kill Plot', command=dv.ani_close)
+    button_2.config(width=20, height=2, pady=5) 
 
-    button_3 = tk.Button(root, text ='Kill Plot', command=dv.ani_close)
-    button_3.config(width=20, height=2, pady=5) 
+    button_3 = tk.Button(root, text ='Kill all and Exit', command=lambda:[root.destroy,dg.gen_stop(),dv.ani_close(),print('bye'),sys.exit(0)])
+    button_3.config(width=20, height=2, pady=5)
 
-    button_4 = tk.Button(root, text ='Exit', command=lambda:[root.destroy,print('bye'),sys.exit(0)])
+    button_4 = tk.Button(root, text ='Copy and Save Data', command=dg.save_data)
     button_4.config(width=20, height=2, pady=5)
 
-    button_5 = tk.Button(root, text ='Copy and Save Data', command=dg.save_data)
+    button_5 = tk.Button(root, text ='Start Data Gen', command=gen)
     button_5.config(width=20, height=2, pady=5)
 
-    button_6 = tk.Button(root, text ='Start Just Data Gen', command=gen)
+    button_6 = tk.Button(root, text ='Start Data Animation', command=vis)
     button_6.config(width=20, height=2, pady=5)
-
-    button_7 = tk.Button(root, text ='Start Just Data Animation', command=vis)
-    button_7.config(width=20, height=2, pady=5)
-
 
     button_1.pack()
     button_2.pack()
@@ -38,7 +34,6 @@ def run_gui():
     button_4.pack()
     button_5.pack()
     button_6.pack()
-    button_7.pack()
 
     root.mainloop()
 
