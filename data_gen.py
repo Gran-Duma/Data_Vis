@@ -43,12 +43,6 @@ def gen():
             total_2 = total_2 + random.randint(-5, 6)
 
         time.sleep(1)
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-    
-=======
-=======
->>>>>>> gui_control
 
         if yoyo == False:
 
@@ -65,17 +59,9 @@ def save_data():
     """stops data gen and makes a copy of current data gen csv"""
     today = date.today()
     d1 = today.strftime("%m_%d_%y")
-<<<<<<< HEAD
     df = pd.read_csv('data.csv')
     df.to_csv(f'{d1}_' + 'data.csv')
 
->>>>>>> Stashed changes
-=======
-    gen_stop()
-    df = pd.read_csv('data.csv')
-    df.to_csv(f'{d1}_' + 'data.csv')
-
->>>>>>> gui_control
 if __name__ == '__main__':
 
     gen()
