@@ -5,8 +5,12 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import random
 import pandas as pd
+import time
 
 def ani_master():
+
+    global s
+    s = True
 
     fig = plt.figure()
     xs = []
@@ -23,13 +27,27 @@ def data_gen():
 
     return y
 
+def save_stop():
+    """stops saving"""
+    global s
+    s = False
+
 def save_data():
-    """stops data gen and makes a copy of current data gen csv"""
+
     today = dt.datetime.today()
     d1 = today.strftime("%m_%d_%y")
-    df.to_csv(f'{d1}_' + 'data.csv')
+   
+    while s == True:
+        df.to_csv(f'{d1}_' + 'data.csv')
+        time.sleep(10)
+        print('saved')
+
+        if s == False:
+            print('Stopped saving')
+            break
 
 def ani_close():
+    
     plt.close('all')
 
 
@@ -40,6 +58,7 @@ def animate(i, xs, ys1):
     xs.append(dt.datetime.now().strftime('%H:%M:%S.%f'))
     ys1.append(data_gen())
 
+    # make dataframe out of list?
     global df
     df = pd.DataFrame(ys1)
 
