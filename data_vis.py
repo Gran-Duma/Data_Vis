@@ -1,35 +1,62 @@
 #!/usr/bin/env python3
 
-import pandas as pd
+import datetime as dt
 import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
+import matplotlib.animation as animation
+import random
+import pandas as pd
 
-def data_vis():
-    """creates animation from current figure then shows it in new window"""
+def ani_master():
 
-    ani = FuncAnimation(plt.gcf(), animate, interval=1000)
+    fig = plt.figure()
+    xs = []
+    ys1 = []
 
+
+    # Set up plot to call animate() function periodically
+    ani = animation.FuncAnimation(fig, animate, fargs=(xs, ys1), interval=1000)
     plt.show()
 
-def animate(i):
-    """reads from csv and makes figure"""
+def data_gen():
 
-    data = pd.read_csv('data.csv')
-    x = data['x_value']
-    y1 = data['total_1']
-    y2 = data['total_2']
+    y = random.randint(1,10)
 
-    plt.cla()
+    return y
 
-    plt.plot(x, y1, label='y1')
-    plt.plot(x, y2, label='y2')
-
-    plt.legend(loc='upper left')
-    plt.tight_layout()
+def save_data():
+    """stops data gen and makes a copy of current data gen csv"""
+    today = dt.datetime.today()
+    d1 = today.strftime("%m_%d_%y")
+    df.to_csv(f'{d1}_' + 'data.csv')
 
 def ani_close():
     plt.close('all')
 
+
+# This function is called periodically from FuncAnimation
+def animate(i, xs, ys1):
+
+    # Add x and y to lists
+    xs.append(dt.datetime.now().strftime('%H:%M:%S.%f'))
+    ys1.append(data_gen())
+
+    global df
+    df = pd.DataFrame(ys1)
+
+    # Limit x and y lists to 20 items
+    xs = xs[-20:]
+    ys2 = ys1[-20:]
+
+    # Draw x and y lists
+    plt.cla()
+    plt.plot(xs, ys2)
+
+    # Format plot
+    plt.xticks(rotation=45, ha='right')
+    plt.subplots_adjust(bottom=0.30)
+    plt.title('Temperature over Time')
+    plt.ylabel('Temperature (deg C)')
+
 if __name__ == '__main__':
 
-    data_vis()
+    ani_master()
