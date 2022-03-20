@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
 import tkinter as tk
-
-from matplotlib.pyplot import fill
 import data_vis as dv
 import sys
 import threading
@@ -12,15 +10,17 @@ import webbrowser
 def run_gui():
     """main window with options"""
 
+    t1 = threading.Thread(target=dv.save_data)
+
     root = tk.Tk()
     root.geometry("600x300")
 
-    root.title('Unjust War in the Ukraine')
-    
+    root.title('Instrument Monitor')
+
     root.columnconfigure(0, weight=1)
     root.columnconfigure(1, weight=1)
 
-    button_1 = tk.Button(root, text ='Load Instructions', command = instruct)
+    button_1 = tk.Button(root, text ='Load Instructions', command=instruct)
     button_1.grid(row=0,column=0,sticky=tk.EW)
 
     button_2 = tk.Button(root, text ='Start Visuals', command=dv.ani_master)
