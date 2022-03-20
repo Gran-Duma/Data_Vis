@@ -23,7 +23,7 @@ def run_gui():
     button_1 = tk.Button(root, text ='Load Instructions', command=instruct)
     button_1.grid(row=0,column=0,sticky=tk.EW)
 
-    button_2 = tk.Button(root, text ='Start Visuals', command=dv.ani_master)
+    button_2 = tk.Button(root, text ='Start Visuals', command=dv.Temp_V_Time)
     button_2.grid(row=1,column=0,sticky=tk.EW)
 
     button_3 = tk.Button(root, text ='Save Data', command=save)
