@@ -1,8 +1,13 @@
+#!/usr/bin/env python3
+
 import tkinter as tk
+
+from matplotlib.pyplot import fill
 import data_vis as dv
-import data_gen as dg
-import threading
 import sys
+import threading
+import webbrowser
+
 
 def run_gui():
     """main window with options"""
@@ -10,47 +15,37 @@ def run_gui():
     root = tk.Tk()
     root.geometry("600x300")
 
-    button_1 = tk.Button(root, text ='Kill Data Gen', command=dg.gen_stop)
-    button_1.config(width=20, height=2, pady=5)
+    root.title('Unjust War in the Ukraine')
+    
+    root.columnconfigure(0, weight=1)
+    root.columnconfigure(1, weight=1)
 
-    button_2 = tk.Button(root, text ='Kill Plot', command=dv.ani_close)
-    button_2.config(width=20, height=2, pady=5) 
+    button_1 = tk.Button(root, text ='Load Instructions', command = instruct)
+    button_1.grid(row=0,column=0,sticky=tk.EW)
 
-    button_3 = tk.Button(root, text ='Kill all and Exit', command=lambda:[root.destroy,dg.gen_stop(),dv.ani_close(),print('bye'),sys.exit(0)])
-    button_3.config(width=20, height=2, pady=5)
+    button_2 = tk.Button(root, text ='Start Visuals', command=dv.ani_master)
+    button_2.grid(row=1,column=0,sticky=tk.EW)
 
-    button_4 = tk.Button(root, text ='Copy and Save Data', command=dg.save_data)
-    button_4.config(width=20, height=2, pady=5)
+    button_3 = tk.Button(root, text ='Save Data', command=save)
+    button_3.grid(row=2,column=0,sticky=tk.EW)
 
-    button_5 = tk.Button(root, text ='Start Data Gen', command=gen)
-    button_5.config(width=20, height=2, pady=5)
-
-    button_6 = tk.Button(root, text ='Start Data Animation', command=vis)
-    button_6.config(width=20, height=2, pady=5)
-
-    button_1.pack()
-    button_2.pack()
-    button_3.pack()
-    button_4.pack()
-    button_5.pack()
-    button_6.pack()
+    button_4 = tk.Button(root, text ='Close and Exit', command=lambda:[root.destroy(),dv.save_stop(),dv.ani_close(),sys.exit(0)])
+    button_4.grid(row=3,column=0,sticky=tk.EW)
 
     root.mainloop()
 
-def vis():
-    """uses multithreading to write to call data vis module"""
 
-    t2 = threading.Thread(target=dv.data_vis)
-    t2.start()
+def save():
+    """assign thread to call data saving function"""
 
-def gen():
-    """multithread start data gen"""
+    t1 = threading.Thread(target=dv.save_data)
+    t1.start()
 
-    t3 = threading.Thread(target=dg.gen)
-    t3.start()
+def instruct():
+
+    webbrowser.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ')
 
 if __name__ == '__main__':
 
-    t1 = threading.Thread(target=run_gui)
+    run_gui()
 
-    t1.start()
