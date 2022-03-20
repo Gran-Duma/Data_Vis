@@ -10,8 +10,7 @@ import time
 def ani_master():
     """primary data vis coordinating function"""
 
-    global s
-    s = True
+    # iniatilize flag to allow saving data if save_data is called
 
     fig = plt.figure()
     xs = []
@@ -40,6 +39,9 @@ def save_data():
 
     today = dt.datetime.today()
     d1 = today.strftime("%m_%d_%y")
+
+    global s
+    s = True
    
     while s == True:
 
