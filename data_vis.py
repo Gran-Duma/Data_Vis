@@ -10,8 +10,6 @@ import time
 def ani_master():
     """primary data vis coordinating function"""
 
-    # iniatilize flag to allow saving data if save_data is called
-
     fig = plt.figure()
     xs = []
     ys1 = []
