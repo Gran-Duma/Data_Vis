@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 import tkinter as tk
+
+from numpy import save
 import data_vis as dv
 import sys
 import threading
@@ -9,8 +11,6 @@ import webbrowser
 
 def run_gui():
     """main window with options"""
-
-    t1 = threading.Thread(target=dv.save_data)
 
     root = tk.Tk()
     root.geometry("600x300")
@@ -38,7 +38,7 @@ def run_gui():
 def save():
     """assign thread to call data saving function"""
 
-    t1 = threading.Thread(target=dv.save_data)
+    t1 = threading.Thread(target=dv.Temp_V_Time_Save)
     t1.start()
 
 def instruct():
