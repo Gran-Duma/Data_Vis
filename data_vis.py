@@ -7,18 +7,20 @@ import random
 import pandas as pd
 import time
 
+# import instrument ?
 class Animate:
 
-    def __init__(self,y_name):
+    def __init__(self,y_name,units):
         self.fig = plt.figure()
         self.y_name = y_name
+        self.units = units
         self.x = []
         self.y = []
 
     def Plot(self,i):
         # Add x and y to lists
         self.x.append(dt.datetime.now().strftime('%H:%M:%S.%f'))
-        self.y.append(data_gen())
+        self.y.append(eval(f'{self.y_name}_Reading()'))
 
 
         # make dataframe out of list?
@@ -38,21 +40,21 @@ class Animate:
         # Format plot
         plt.xticks(rotation=45, ha='right')
         plt.subplots_adjust(bottom=0.30)
-        plt.title('Temperature over Time')
-        plt.ylabel('Temperature (deg C)')
-    
+        plt.title(f'{self.y_name} over Time')
+        plt.ylabel(f'{self.y_name} ({self.units})')
+
     def Animation(self):
         self.ani = animation.FuncAnimation(self.fig,self.Plot,interval=1000)
         plt.show()
 
-def data_gen():
-    """returns value to be plotted"""
+def Temperature_Reading():
 
-    y = random.randint(1,10)
+    temp = random.randint(1,10)
 
-    # temp = tc.MeasureTemp(self.inst_T)
+    # temp = instrument.GetTemp() ?
 
-    return y
+    return temp
+
 
 def save_stop():
     """stops saving"""
@@ -89,7 +91,7 @@ def ani_close():
 
 def Temp_V_Time():
     global Temp_Graph
-    Temp_Graph = Animate('T')
+    Temp_Graph = Animate('Temperature','C')
     Temp_Graph.Animation()
 
 if __name__ == '__main__':
