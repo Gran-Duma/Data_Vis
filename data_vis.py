@@ -48,6 +48,26 @@ class Animate:
         self.ani = animation.FuncAnimation(self.fig,self.Plot,interval=1000)
         plt.show()
 
+    def save_data(self):
+
+        today = dt.datetime.today()
+        date = today.strftime("%m_%d_%y")
+
+        global save_flag
+        save_flag = True
+    
+        while save_flag == True:
+
+            
+            self.df.to_csv(f'{date}_' + 'data.csv')
+            time.sleep(10)
+            print('Saved')
+
+            if save_flag == False:
+                
+                print('Stopped saving')
+                break
+
 def Temperature_Reading():
 
     temp = random.randint(1,10)
@@ -68,27 +88,6 @@ def save_stop():
     global save_flag
     save_flag = False
     
-def save_data():
-    """repeatedly save currently appending dataframe to csv"""
-
-
-    today = dt.datetime.today()
-    d1 = today.strftime("%m_%d_%y")
-
-    global save_flag
-    save_flag = True
-   
-    while save_flag == True:
-
-        
-        Temp_Graph.df.to_csv(f'{d1}_' + 'data.csv')
-        time.sleep(10)
-        print('Saved')
-
-        if save_flag == False:
-            
-            print('Stopped saving')
-            break
 
 def ani_close():
     """close all matplotlib stuff"""
@@ -100,11 +99,14 @@ def Temp_V_Time():
     Temp_Graph = Animate('Temperature','C')
     Temp_Graph.Animation()
 
+def Temp_V_Time_Save():
+    Temp_Graph.save_data()
+
 def Res_V_Time():
     global Res_Graph
     Res_Graph = Animate('Resistance','mOhm')
     Res_Graph.Animation()
 
 if __name__ == '__main__':
-    # Temp_V_Time()
-    Res_V_Time()
+    Temp_V_Time()
+ 
