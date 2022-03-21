@@ -14,28 +14,29 @@ class Animate:
         self.fig = plt.figure()
         self.y_name = y_name
         self.units = units
-        self.x = []
-        self.y = []
-
+        self.col_1_name = 'Time'
+        self.col_2_name = f'{self.y_name}'
+        self.df = pd.DataFrame(columns=[self.col_1_name,self.col_2_name])
+        self.ax = plt.gca()
+        
     def Plot(self,i):
-        # Add x and y to lists
-        self.x.append(dt.datetime.now().strftime('%H:%M:%S.%f'))
-        self.y.append(eval(f'{self.y_name}_Reading()'))
+  
+        # get time or query intstrument
+        col_1 = (dt.datetime.now().strftime('%H:%M:%S.%f'))
+        col_2 = eval(f'{self.y_name}_Reading()')
+
+        # append end of dataframe
+  
+        self.df.loc[len(self.df.index)] = [col_1,col_2]
 
 
-        # make dataframe out of list?
-        self.df = pd.DataFrame(data=self.y,columns=[f'{self.y_name}'])
-        old_index = self.df.index.tolist() 
-        self.df = self.df.rename(index=dict(zip(old_index, self.x)))
+        # only show last entries of dataframe to avoid clutter
+        self.df1 = self.df.tail(7)
 
-
-        # Limit x and y lists to 20 items
-        self.x1 = self.x[-20:]
-        self.y1 = self.y[-20:]
-
-        # Draw x and y lists
         plt.cla()
-        plt.plot(self.x1, self.y1)
+        self.df1.plot(kind='line',x=self.col_1_name,y=self.col_2_name, color='red', ax=self.ax)
+
+
 
         # Format plot
         plt.xticks(rotation=45, ha='right')
@@ -55,6 +56,11 @@ def Temperature_Reading():
 
     return temp
 
+def Resistance_Reading():
+
+    res = random.randint(50,125)
+
+    return res
 
 def save_stop():
     """stops saving"""
@@ -94,5 +100,11 @@ def Temp_V_Time():
     Temp_Graph = Animate('Temperature','C')
     Temp_Graph.Animation()
 
+def Res_V_Time():
+    global Res_Graph
+    Res_Graph = Animate('Resistance','mOhm')
+    Res_Graph.Animation()
+
 if __name__ == '__main__':
-    Temp_V_Time()
+    # Temp_V_Time()
+    Res_V_Time()
