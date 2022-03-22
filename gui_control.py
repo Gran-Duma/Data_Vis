@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
 import tkinter as tk
-
-from numpy import save
 import data_vis as dv
 import sys
 import threading

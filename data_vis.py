@@ -10,46 +10,56 @@ import time
 # import instrument ?
 class Animate:
 
-    def __init__(self,y_name,units):
-        self.fig = plt.figure()
-        self.y_name = y_name
-        self.units = units
-        self.col_1_name = 'Time'
-        self.col_2_name = f'{self.y_name}'
-        self.df = pd.DataFrame(columns=[self.col_1_name,self.col_2_name])
-        self.ax = plt.gca()
+    def __init__(self,col_1_name,col_1_units):
+
+        self.fig,self.ax1 = plt.subplots()
+
+        self.col_0_name = 'Time'
+        self.col_0_name = f'{self.col_0_name}'
+
+        self.col_1_name = col_1_name
+        self.col_1_units = col_1_units
+
+        self.df = pd.DataFrame(columns=[self.col_0_name,self.col_1_name])
         
     def Plot(self,i):
   
         # get time or query intstrument
-        col_1 = (dt.datetime.now().strftime('%H:%M:%S.%f'))
-        col_2 = eval(f'{self.y_name}_Reading()')
+        col_0 = (dt.datetime.now().strftime('%H:%M:%S.%f'))
+        col_1 = eval(f'{self.col_1_name}_Reading()')
 
         # append end of dataframe
   
-        self.df.loc[len(self.df.index)] = [col_1,col_2]
+        self.df.loc[len(self.df.index)] = [col_0,col_1]
 
 
         # only show last entries of dataframe to avoid clutter
         self.df1 = self.df.tail(7)
 
+        # clear plot to avoid plotting same stuff on top of eachother
         plt.cla()
-        self.df1.plot(kind='line',x=self.col_1_name,y=self.col_2_name, color='red', ax=self.ax)
+
+        self.ax1.set_title(f'{self.col_1_name} vs. {self.col_0_name}')
+        self.ax1.set_xlabel(self.col_0_name)
+        self.ax1.set_ylabel(f'{self.col_1_name} ({self.col_1_units})')
 
 
+        self.df1.plot(x=self.col_0_name,y=self.col_1_name,ax=self.ax1)
+        
+        # needed due to appending nature of data
+        for label in self.ax1.get_xticklabels():
+            label.set_ha("right")
+            label.set_rotation(45)
 
-        # Format plot
-        plt.xticks(rotation=45, ha='right')
-        plt.subplots_adjust(bottom=0.30)
-        plt.title(f'{self.y_name} over Time')
-        plt.ylabel(f'{self.y_name} ({self.units})')
+        self.ax1.set_ylim([0, 273])
 
     def Animation(self):
         self.ani = animation.FuncAnimation(self.fig,self.Plot,interval=1000)
         plt.show()
 
     def save_data(self):
-
+        
+        # grabs current date 
         today = dt.datetime.today()
         date = today.strftime("%m_%d_%y")
 
@@ -58,7 +68,7 @@ class Animate:
     
         while save_flag == True:
 
-            
+            # saves csv every 10 seconds
             self.df.to_csv(f'{date}_' + 'data.csv')
             time.sleep(10)
             print('Saved')
@@ -70,7 +80,7 @@ class Animate:
 
 def Temperature_Reading():
 
-    temp = random.randint(1,10)
+    temp = random.randint(5,230)
 
     # temp = instrument.GetTemp() ?
 
@@ -96,7 +106,7 @@ def ani_close():
 
 def Temp_V_Time():
     global Temp_Graph
-    Temp_Graph = Animate('Temperature','C')
+    Temp_Graph = Animate('Temperature','K')
     Temp_Graph.Animation()
 
 def Temp_V_Time_Save():
