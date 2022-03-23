@@ -25,6 +25,12 @@ class Animate:
     
         self.df = pd.DataFrame(columns=[self.col_0_name,self.col_1_name,self.col_2_name])
         
+        today = dt.datetime.today()
+        
+        self.date = today.strftime("%m_%d_%y")
+
+        self.save_flag = True
+
     def Plot(self,i):
   
         # get time or query intstrument
@@ -69,25 +75,21 @@ class Animate:
         plt.show()
 
     def save_data(self):
-        
-        # grabs current date 
-        today = dt.datetime.today()
-        date = today.strftime("%m_%d_%y")
-
-        global save_flag
-        save_flag = True
     
-        while save_flag == True:
+        while self.save_flag == True:
 
             # saves csv every 10 seconds
-            self.df.to_csv(f'{date}_' + 'data.csv')
+            self.df.to_csv(f'{self.date}_' + 'data.csv')
             time.sleep(10)
             print('Saved')
 
-            if save_flag == False:
+            if self.save_flag == False:
                 
                 print('Stopped saving')
                 break
+
+    def stop_save(self):
+        self.save_flag = False
 
 def Temperature_Reading():
 
@@ -102,28 +104,15 @@ def Resistance_Reading():
     res = random.randint(50,125)
 
     return res
-
-def save_stop():
-    """stops saving"""
-
-    global save_flag
-    save_flag = False
     
-
 def ani_close():
     """close all matplotlib stuff"""
 
     plt.close('all')
 
-def Visuals():
-    global Graph
-    Graph = Animate('K','mOhm')
-    Graph.Animation()
-
-def Data_Save():
-    Graph.save_data()
 
 if __name__ == '__main__':
 
-    Visuals()
+    Graph = Animate('K','mOhm')
+    Graph.Animation()
  
