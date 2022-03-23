@@ -2,7 +2,6 @@
 
 import tkinter as tk
 import data_vis as dv
-import main as main
 import sys
 import webbrowser
 

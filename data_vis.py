@@ -112,11 +112,7 @@ def ani_close():
 
 
 if __name__ == '__main__':
-<<<<<<< HEAD
 
     Graph = Animate('K','mOhm')
     Graph.Animation()
  
-=======
-    Visuals()
->>>>>>> 0403f9ace5de8dc11ea05721f77b2a41f42bae4c
