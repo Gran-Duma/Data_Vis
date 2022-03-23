@@ -124,6 +124,4 @@ def Data_Save():
     Graph.save_data()
 
 if __name__ == '__main__':
-
     Visuals()
- 
