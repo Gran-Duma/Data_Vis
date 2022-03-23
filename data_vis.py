@@ -7,86 +7,121 @@ import random
 import pandas as pd
 import time
 
-def ani_master():
-    """primary data vis coordinating function"""
+# import instrument ?
+class Animate:
 
-    fig = plt.figure()
-    xs = []
-    ys1 = []
+    def __init__(self,col_1_units,col_2_units):
 
+        self.fig,(self.ax1,self.ax2) = plt.subplots(2)
 
-    # Set up plot to call animate() function periodically
-    ani = animation.FuncAnimation(fig, animate, fargs=(xs, ys1), interval=1000)
-    plt.show()
+        self.col_0_name = 'Time'
+        self.col_0_name = f'{self.col_0_name}'
 
-def data_gen():
-    """returns value to be plotted"""
+        self.col_1_name = 'Temperature'
+        self.col_1_units = col_1_units
 
-    y = random.randint(1,10)
+        self.col_2_name = 'Resistance'
+        self.col_2_units = col_2_units
+    
+        self.df = pd.DataFrame(columns=[self.col_0_name,self.col_1_name,self.col_2_name])
+        
+    def Plot(self,i):
+  
+        # get time or query intstrument
+        col_0 = (dt.datetime.now().strftime('%H:%M:%S.%f'))
+        col_1 = eval(f'{self.col_1_name}_Reading()')
+        col_2 = eval(f'{self.col_2_name}_Reading()')
 
-    return y
+        # append end of dataframe
+        self.df.loc[len(self.df.index)] = [col_0,col_1,col_2]
+
+        # only show last entries of dataframe to avoid clutter
+        self.df1 = self.df.tail(7)
+
+        # clear plot to avoid plotting same stuff on top of eachother
+        self.ax1.clear()
+
+        self.ax1.set_title(f'{self.col_1_name} vs. {self.col_0_name}')
+        self.ax1.set_xlabel(self.col_0_name)
+        self.ax1.set_ylabel(f'{self.col_1_name} ({self.col_1_units})')
+
+        self.df1.plot(x=self.col_0_name,y=self.col_1_name,ax=self.ax1)
+
+        # needed due to appending nature of data
+        for label in self.ax1.get_xticklabels():
+            label.set_ha("right")
+            label.set_rotation(45)
+
+        self.ax1.set_ylim([0, 273])
+
+        self.ax2.clear()
+
+        self.ax2.set_title(f'{self.col_2_name} vs. {self.col_1_name}')
+        self.ax2.set_xlabel(self.col_1_name)
+        self.ax2.set_ylabel(f'{self.col_2_name} ({self.col_2_units})')
+
+        self.df1.plot(x=self.col_1_name,y=self.col_2_name,ax=self.ax2)
+
+        plt.tight_layout()
+
+    def Animation(self):
+        self.ani = animation.FuncAnimation(self.fig,self.Plot,interval=1000)
+        plt.show()
+
+    def save_data(self):
+        
+        # grabs current date 
+        today = dt.datetime.today()
+        date = today.strftime("%m_%d_%y")
+
+        global save_flag
+        save_flag = True
+    
+        while save_flag == True:
+
+            # saves csv every 10 seconds
+            self.df.to_csv(f'{date}_' + 'data.csv')
+            time.sleep(10)
+            print('Saved')
+
+            if save_flag == False:
+                
+                print('Stopped saving')
+                break
+
+def Temperature_Reading():
+
+    temp = random.randint(5,230)
+    
+    # temp = instrument.GetTemp() ?
+
+    return temp
+
+def Resistance_Reading():
+
+    res = random.randint(50,125)
+
+    return res
 
 def save_stop():
     """stops saving"""
 
-    global s
-    s = False
-
-def save_data():
-    """repeatedly save currently appending dataframe to csv"""
-
-    today = dt.datetime.today()
-    d1 = today.strftime("%m_%d_%y")
-
-    global s
-    s = True
-   
-    while s == True:
-
-        df.to_csv(f'{d1}_' + 'data.csv')
-        time.sleep(10)
-        print('Saved')
-
-        if s == False:
-            
-            print('Stopped saving')
-            break
+    global save_flag
+    save_flag = False
+    
 
 def ani_close():
     """close all matplotlib stuff"""
 
     plt.close('all')
 
+def Visuals():
+    global Graph
+    Graph = Animate('K','mOhm')
+    Graph.Animation()
 
-
-def animate(i, xs, ys1):
-    """iterated plot function called by FuncAnimation according to interval"""
-
-    # Add x and y to lists
-    xs.append(dt.datetime.now().strftime('%H:%M:%S.%f'))
-    ys1.append(data_gen())
-
-    # make dataframe out of list?
-    global df
-    df = pd.DataFrame(data = ys1, columns=['T'])
-    old_index = df.index.tolist()
-    df = df.rename(index=dict(zip(old_index, xs)))
-
-
-    # Limit x and y lists to 20 items
-    xs = xs[-20:]
-    ys2 = ys1[-20:]
-
-    # Draw x and y lists
-    plt.cla()
-    plt.plot(xs, ys2)
-
-    # Format plot
-    plt.xticks(rotation=45, ha='right')
-    plt.subplots_adjust(bottom=0.30)
-    plt.title('Temperature over Time')
-    plt.ylabel('Temperature (deg C)')
+def Data_Save():
+    Graph.save_data()
 
 if __name__ == '__main__':
-
-    ani_master()
+    Visuals()
