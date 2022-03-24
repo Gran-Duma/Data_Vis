@@ -8,6 +8,9 @@ import pandas as pd
 import time
 import threading
 import webbrowser
+import tkinter as tk
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, 
+NavigationToolbar2Tk)
 
 # import instrument ?
 class Animate:
@@ -81,10 +84,21 @@ class Animate:
 
         plt.tight_layout()
 
-    def Animation(self):
+    def Animation(self,master):
         """starts animation loop by calling Plot method"""
+        
+    
         self.ani = animation.FuncAnimation(self.fig,self.Plot,interval=1000)
-        plt.show()
+
+        canvas = FigureCanvasTkAgg(self.fig, master = master)  
+        canvas.draw()
+
+        # placing the canvas on the Tkinter window
+        canvas.get_tk_widget().pack(expand=True)
+    
+        # creating the Matplotlib toolbar
+        toolbar = NavigationToolbar2Tk(canvas,master)
+        toolbar.update()
 
     def ani_close():
         """close all figures"""
