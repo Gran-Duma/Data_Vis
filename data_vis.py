@@ -43,7 +43,8 @@ class Animate:
         # Query instrument and set timestamp
         col_0 = (dt.datetime.now().strftime('%H:%M:%S.%f'))
         col_1 = eval(f'{self.col_1_name}_Reading()')
-        col_2 = eval(f'{self.col_2_name}_Reading()')
+        # Resistance is a function of Temp for this demonstration
+        col_2 = eval(f'{self.col_2_name}_Reading(col_1)')
 
         # append end of dataframe with instrument readings
         self.df.loc[len(self.df.index)] = [col_0,col_1,col_2]
@@ -65,8 +66,8 @@ class Animate:
             label.set_ha("right")
             label.set_rotation(45)
         
-        # set min/max Y axis
-        self.ax1.set_ylim([0, 273])
+
+        # self.ax1.set_ylim([450, 550])
 
         self.ax2.clear()
 
@@ -75,6 +76,8 @@ class Animate:
         self.ax2.set_ylabel(f'{self.col_2_name} ({self.col_2_units})')
 
         self.df1.plot(x=self.col_1_name,y=self.col_2_name,ax=self.ax2)
+
+        # self.ax2.set_ylim([350, 500])
 
         plt.tight_layout()
 
@@ -115,16 +118,16 @@ class Animate:
 
 def Temperature_Reading():
 
-    temp = random.randint(5,230)
+    temp = 500
+    temp += random.randint(-10,10)
     
     # temp = instrument.GetTemp() ?
 
     return temp
 
-def Resistance_Reading():
+def Resistance_Reading(temp):
 
-    res = random.randint(50,125)
-
+    res = temp*.87
     return res
     
 def ani_close():
