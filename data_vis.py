@@ -8,9 +8,8 @@ import pandas as pd
 import time
 import threading
 import webbrowser
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 import tkinter as tk
-from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, 
-NavigationToolbar2Tk)
 
 # import instrument ?
 class Animate:
@@ -61,14 +60,12 @@ class Animate:
         self.ax1.set_title(f'{self.col_1_name} vs. {self.col_0_name}')
         self.ax1.set_xlabel(self.col_0_name)
         self.ax1.set_ylabel(f'{self.col_1_name} ({self.col_1_units})')
-
-        self.df1.plot(x=self.col_0_name,y=self.col_1_name,ax=self.ax1)
-
-        # needed due to appending nature of data?
+        self.df1.plot(x=self.col_0_name,y=self.col_1_name,ax=self.ax1,legend=False,color='red')
+  
+        # rotate previous and current iterated timestamp
         for label in self.ax1.get_xticklabels():
             label.set_ha("right")
             label.set_rotation(45)
-        
 
         # self.ax1.set_ylim([450, 550])
 
@@ -78,11 +75,12 @@ class Animate:
         self.ax2.set_xlabel(self.col_1_name)
         self.ax2.set_ylabel(f'{self.col_2_name} ({self.col_2_units})')
 
-        self.df1.plot(x=self.col_1_name,y=self.col_2_name,ax=self.ax2)
+        self.df1.plot(x=self.col_1_name,y=self.col_2_name,ax=self.ax2,legend=False)
 
         # self.ax2.set_ylim([350, 500])
 
         plt.tight_layout()
+
 
     def Animation(self,master):
         """starts animation loop by calling Plot method"""
@@ -90,15 +88,31 @@ class Animate:
     
         self.ani = animation.FuncAnimation(self.fig,self.Plot,interval=1000)
 
-        canvas = FigureCanvasTkAgg(self.fig, master = master)  
-        canvas.draw()
+        # if no tk frame specified, run in native FuncAnimation GUI
+        if master:
 
-        # placing the canvas on the Tkinter window
-        canvas.get_tk_widget().pack(expand=True)
-    
-        # creating the Matplotlib toolbar
-        toolbar = NavigationToolbar2Tk(canvas,master)
-        toolbar.update()
+            canvas = FigureCanvasTkAgg(self.fig, master = master) 
+            canvas.draw()
+
+            # placing the canvas on the Tkinter window
+            canvas.get_tk_widget().grid(row=3,columnspan=3,sticky=tk.NSEW)
+
+            # create the Frame to house toolbar
+            toolbar_frame = tk.Frame(master=master)
+            toolbar_frame.grid(row=4,columnspan=3)
+            # create the Matplotlib toolbar
+            toolbar = NavigationToolbar2Tk(canvas, toolbar_frame)
+            toolbar.update()
+
+            # shows save_flag state by matching with buttons that start/stop saving
+            self.label_11 = tk.Label(master)
+            self.label_11.grid(column=2,row=0,rowspan=3,sticky=tk.NSEW)
+
+
+        if master == None:
+
+            plt.show()
+        
 
     def ani_close():
         """close all figures"""
@@ -113,17 +127,21 @@ class Animate:
     def save_data(self):
         """writes instance dataframe to csv until stopped"""
         self.save_flag = True
-
+        self.label_11.config(background='green')
+        count = 0
         while self.save_flag == True:
 
             # saves csv every 10 seconds
             self.df.to_csv(f'{self.date}_' + 'data.csv')
             time.sleep(10)
-            print('Saved')
+
+            count +=1
+            self.label_11.config(text=f'Saved {count} times!')
 
             if self.save_flag == False:
                 
                 print('Stopped saving')
+                self.label_11.config(background='red')
                 break
 
     def stop_save(self):
@@ -131,7 +149,7 @@ class Animate:
 
 
 def Temperature_Reading():
-
+    
     temp = 500
     temp += random.randint(-10,10)
     
@@ -152,5 +170,5 @@ def ani_close():
 if __name__ == '__main__':
 
     Graph = Animate('K','mOhm')
-    Graph.Animation()
+    Graph.Animation(None)
  
