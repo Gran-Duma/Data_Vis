@@ -19,6 +19,7 @@ def run_gui(instance):
 
     root.title('Instrument Monitor')
 
+    # create tabs
     tab_control = ttk.Notebook(root)
 
     tab1 = ttk.Frame(tab_control)
@@ -45,14 +46,14 @@ def run_gui(instance):
     button_01 = tk.Button(tab1, text ='Load Instructions', command=instance.instruct, background='sea green',font=('Helvatical bold',20))
     button_01.grid(row=0,columnspan=2,sticky=tk.NSEW)
     
-    button_02 = tk.Button(tab1, text ='Close and Exit', command=lambda:[root.destroy(),instance.stop_save(),dv.ani_close(),sys.exit(0)],background='grey70',font=('Helvatical bold',20))
+    button_02 = tk.Button(tab1, text ='Close and Exit', command=lambda:[instance.stop_save(),root.destroy(),sys.exit(0)],background='grey70',font=('Helvatical bold',20))
     button_02.grid(row=1,columnspan=2,sticky=tk.NSEW)
 
 
-    button_11 = tk.Button(tab2, text ='Start Visuals', command=lambda:[instance.Animation(tab2)],font=('Helvatical bold',20))
+    button_11 = tk.Button(tab2, text ='Start Visuals', command=lambda:[instance.ani_close(),instance.Animation(tab2)],font=('Helvatical bold',20))
     button_11.grid(row=0,columnspan=2,sticky=tk.NSEW)
 
-    button_12 = tk.Button(tab2, text ='Save Data',background='green', command=instance.save_prep,font=('Helvatical bold',20))
+    button_12 = tk.Button(tab2, text ='Save Data',background='green', command=lambda:[instance.start_save()],font=('Helvatical bold',20))
     button_12.grid(row=1,columnspan=2,sticky=tk.NSEW)
 
     button_13 = tk.Button(tab2, text ='Stop Saving',background='red', command=instance.stop_save,font=('Helvatical bold',20))
