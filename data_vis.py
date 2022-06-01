@@ -3,9 +3,9 @@
 import datetime as dt
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-import random
+import random # for testing
 import pandas as pd
-import webbrowser
+import webbrowser # for testing
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 import tkinter as tk
 
@@ -18,7 +18,7 @@ class Animate:
 
         # store time measurements in a single column
         self.col_0_name = 'Time'
-        self.col_0_name = f'{self.col_0_name}'
+        self.col_0_units = f'{self.col_0_name}'
 
         # store temperature measurements in a single column
         self.col_1_name = 'Temperature'
@@ -107,11 +107,12 @@ class Animate:
     def Animation(self,master):
         """starts animation loop by calling Plot method"""
 
-        # clear any previous saving and plotting then redraw subplots
+        # stop any previous data saving/plotting then redraw subplots
         self.ani_stop = False
         self.save_flag = False
         self.fig,(self.ax1,self.ax2) = plt.subplots(2)
         
+        # delay between frames in ms, call Plot function and draw plots on figure
         self.ani = animation.FuncAnimation(self.fig,self.Plot,interval=1000)
 
         # if no tk frame specified, run in native FuncAnimation GUI

@@ -9,22 +9,27 @@ import sys
 def run_gui(instance):
     """main window with options"""
 
+    # create main window
     root = tk.Tk()
-    # getting screen width and height of display
+
+    # get width and height of display
     width = root.winfo_screenwidth() 
     height = root.winfo_screenheight()
 
-    # setting tkinter window size
+    # set tkinter window size to fullscreen
     root.geometry("%dx%d" % (width, height))
 
+    # set main window title
     root.title('Instrument Monitor')
 
-    # create tabs
+    # create notebook to hold tabs
     tab_control = ttk.Notebook(root)
 
+    # create tabs
     tab1 = ttk.Frame(tab_control)
     tab2 = ttk.Frame(tab_control)
     
+    # add tabs to notebook
     tab_control.add(tab1, text ='Tab 1')
     tab_control.add(tab2, text ='Tab 2')
 
